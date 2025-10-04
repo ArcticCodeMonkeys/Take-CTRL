@@ -12,7 +12,7 @@ public class RobotScript : MonoBehaviour
 
     public InputActionReference dodgeAction;
 
-    public float jumpSpeed = 10;
+    public float jumpSpeed = 15;
 
     public float moveSpeed = 5;
 
