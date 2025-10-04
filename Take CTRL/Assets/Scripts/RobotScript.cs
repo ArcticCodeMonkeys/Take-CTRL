@@ -162,12 +162,4 @@ public class RobotScript : MonoBehaviour
         return false;
     }
     
-    private void OnDrawGizmosSelected()
-    {
-        if (groundCheckSphere != null)
-        {
-            Gizmos.color = isGrounded ? Color.green : Color.red;
-            Gizmos.DrawWireSphere(groundCheckSphere.position, groundCheckRadius);
-        }
-    }
 }
