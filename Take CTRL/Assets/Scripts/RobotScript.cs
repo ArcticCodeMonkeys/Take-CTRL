@@ -135,6 +135,7 @@ public class RobotScript : MonoBehaviour
     }
     private void HandleJump()
     {
+        
         if (checkIsGrounded())
         {
             isGrounded = true;
@@ -147,18 +148,32 @@ public class RobotScript : MonoBehaviour
 
     private bool checkIsGrounded()
     {
-        if (groundCheckSphere == null) return false;
-        
+        if (groundCheckSphere == null)
+        {
+            Debug.LogWarning("Ground check sphere is null!");
+            return false;
+        }
+
+       
         Collider2D[] colliders = Physics2D.OverlapCircleAll(groundCheckSphere.position, groundCheckRadius, groundLayer);
-        
         for (int i = 0; i < colliders.Length; i++)
         {
-            if (colliders[i].gameObject != this.gameObject)
+            var col = colliders[i];
+            Debug.Log($"Collider {i}: {col.gameObject.name}, Layer: {LayerMask.LayerToName(col.gameObject.layer)} ({col.gameObject.layer})");
+            if (col.gameObject != this.gameObject)
             {
+                Debug.Log("Grounded: true");
                 return true;
             }
         }
-        
+
+        // Log all colliders found at the position, ignoring layer mask
+        Collider2D[] allColliders = Physics2D.OverlapCircleAll(groundCheckSphere.position, groundCheckRadius);
+        for (int i = 0; i < allColliders.Length; i++)
+        {
+            var col = allColliders[i];
+            bool isGroundLayer = (groundLayer.value & (1 << col.gameObject.layer)) != 0;
+        }
         return false;
     }
     
