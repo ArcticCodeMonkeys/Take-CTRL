@@ -1,6 +1,7 @@
+using Unity.Netcode;
 using UnityEngine;
 
-public class DroneScript : MonoBehaviour
+public class DroneScript : NetworkBehaviour
 {
     public Rigidbody2D rb;
     public Transform playerTransform;

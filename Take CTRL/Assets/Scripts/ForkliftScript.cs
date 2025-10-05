@@ -1,6 +1,7 @@
+using Unity.Netcode;
 using UnityEngine;
 
-public class ForkliftScript : MonoBehaviour
+public class ForkliftScript : NetworkBehaviour
 {
     public Rigidbody2D rb;
     public float moveSpeed = 5f;

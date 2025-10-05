@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4736204577512974917}
   - component: {fileID: 8647608888643796757}
   - component: {fileID: 1022512616552439055}
+  - component: {fileID: -6145712333534799888}
   - component: {fileID: 5533967659739800543}
   m_Layer: 6
   m_Name: Drone
@@ -69,7 +70,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.005326152, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -79,7 +80,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 2.736387, y: 1}
   m_EdgeRadius: 0
 --- !u!50 &8647608888643796757
 Rigidbody2D:
@@ -153,9 +154,9 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1164524029
-  m_SortingLayer: 3
+  m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 9148800814639467426, guid: 85e423ef77abf0948921cf2200fd057a, type: 3}
+  m_Sprite: {fileID: 9148800814639467426, guid: b9b3d8c771d1c46f1bbd477cc875e369, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -166,6 +167,31 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &-6145712333534799888
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7255164140484093452}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
+  GlobalObjectIdHash: 2746197992
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  DeferredDespawnTick: 0
+  Ownership: 8
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 1
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
 --- !u!114 &5533967659739800543
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -178,6 +204,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60e12c0c6a9cd48428c1afd175e81c43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  ShowTopMostFoldoutHeaderGroup: 1
   rb: {fileID: 8647608888643796757}
   playerTransform: {fileID: 0}
   moveSpeed: 2
