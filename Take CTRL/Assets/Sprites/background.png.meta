@@ -1,16 +1,10 @@
 fileFormatVersion: 2
-guid: 48cca32abd465409c9da601f4e576584
+guid: 9b031fb97deee4359bc57409e3f2c1c9
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 2695659056567792274
-    second: forklift_0
-  - first:
-      213: 6859044472522315034
-    second: forklift_1
-  - first:
-      213: 3185097797182195865
-    second: forklift_2
+      213: -7443756053782179069
+    second: background_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -119,67 +113,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: forklift_0
+      name: background_0
       rect:
         serializedVersion: 2
-        x: 201
-        y: 442
-        width: 413
-        height: 320
+        x: 0
+        y: 0
+        width: 2880
+        height: 1080
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 292b94631a7e86520800000000000000
-      internalID: 2695659056567792274
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: forklift_1
-      rect:
-        serializedVersion: 2
-        x: 221
-        y: 459
-        width: 64
-        height: 62
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: a159c436b98303f50800000000000000
-      internalID: 6859044472522315034
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: forklift_2
-      rect:
-        serializedVersion: 2
-        x: 393
-        y: 460
-        width: 63
-        height: 62
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 9988ce7329db33c20800000000000000
-      internalID: 3185097797182195865
+      spriteID: 30356abce4772b890800000000000000
+      internalID: -7443756053782179069
       vertices: []
       indices: 
       edges: []
@@ -188,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 12946ab1b65a8407c90c458996d78995
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -198,9 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      forklift_0: 2695659056567792274
-      forklift_1: 6859044472522315034
-      forklift_2: 3185097797182195865
+      background_0: -7443756053782179069
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
