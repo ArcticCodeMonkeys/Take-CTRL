@@ -97,19 +97,12 @@ public class HostScreenUI : MonoBehaviour
         
         Debug.Log("Creating lobby...");
         
-        // Prevent multiple clicks
-        if (confirmButton != null)
-        {
-            confirmButton.interactable = false;
-        }
-        
         string sessionName = sessionNameInput?.text ?? defaultSessionName;
         
         // Validate session name
         if (string.IsNullOrWhiteSpace(sessionName))
         {
             Debug.LogWarning("Session name is empty!");
-            if (confirmButton != null) confirmButton.interactable = true;
             isProcessingSessionCreation = false;
             return;
         }
@@ -119,26 +112,14 @@ public class HostScreenUI : MonoBehaviour
         // Store session name for later use
         SceneNavigator.PendingSessionName = sessionName;
         
-        // Let Unity Widgets handle the networking automatically
-        Debug.Log("Unity Widgets will handle session creation and networking");
-        
-        // Navigate to lobby after a brief delay to allow widgets to establish session
-        Debug.Log("Starting navigation timer...");
-        Invoke(nameof(NavigateToLobby), 2f);
-    }
-    
-    private void NavigateToLobby()
-    {
-        Debug.Log("Navigating to lobby...");
-        
+        // Navigate directly to lobby
         if (SceneNavigator.Instance != null)
         {
-            SceneNavigator.Instance.GoToLobbyAsHost(SceneNavigator.PendingSessionName);
+            SceneNavigator.Instance.GoToLobbyAsHost(sessionName);
         }
         else
         {
             Debug.LogError("SceneNavigator.Instance is null!");
-            if (confirmButton != null) confirmButton.interactable = true;
             isProcessingSessionCreation = false;
         }
     }

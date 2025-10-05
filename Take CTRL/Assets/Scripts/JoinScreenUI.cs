@@ -121,34 +121,12 @@ public class JoinScreenUI : MonoBehaviour
             return;
         }
         
-        Debug.Log($"Join Screen: Attempting to join session with code: {sessionCode}");
+        Debug.Log($"Join Screen: Session code entered: {sessionCode}");
         
         // Store session code for later use
         SceneNavigator.PendingSessionCode = sessionCode;
         
-        // Disable button to prevent multiple clicks
-        if (confirmButton != null)
-        {
-            confirmButton.interactable = false;
-        }
-        
-        // Let Unity Widgets handle the networking automatically
-        Debug.Log("Unity Widgets will handle session joining and networking");
-        
-        // Wait a moment for Unity Widgets to establish connection then navigate to lobby
-        StartCoroutine(NavigateToLobbyAfterDelay());
-    }
-    
-    /// <summary>
-    /// Waits for a brief moment to allow connection to establish, then navigates to lobby
-    /// </summary>
-    private System.Collections.IEnumerator NavigateToLobbyAfterDelay()
-    {
-        Debug.Log("Waiting for connection to establish...");
-        yield return new WaitForSeconds(1.0f);
-        
-        // Navigate to lobby scene as client
-        string sessionCode = sessionCodeInput.text.Trim();
+        // Navigate directly to lobby scene as client
         if (SceneNavigator.Instance != null)
         {
             SceneNavigator.Instance.GoToLobbyAsClient(sessionCode);
@@ -156,8 +134,6 @@ public class JoinScreenUI : MonoBehaviour
         else
         {
             Debug.LogError("SceneNavigator.Instance is null!");
-            // Re-enable button and reset flag on error
-            if (confirmButton != null) confirmButton.interactable = true;
             isProcessingJoinRequest = false;
         }
     }
