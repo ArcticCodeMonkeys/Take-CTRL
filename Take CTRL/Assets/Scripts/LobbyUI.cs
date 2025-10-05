@@ -113,7 +113,7 @@ public class LobbyUI : MonoBehaviour
         
         if (sessionCodeText != null && isHost)
         {
-            sessionCodeText.text = $"Join Code: {sessionCode}";
+            sessionCodeText.text = $"Code: {sessionCode}";
         }
         
         UpdateCopyButtonState();
@@ -217,7 +217,7 @@ public class LobbyUI : MonoBehaviour
             {
                 // Generate session code immediately for host
                 string sessionCode = GenerateSessionCode();
-                sessionCodeText.text = $"Join Code: {sessionCode}";
+                sessionCodeText.text = $"Code: {sessionCode}";
                 // Update copy button state since we have a new session code
                 UpdateCopyButtonState();
             }

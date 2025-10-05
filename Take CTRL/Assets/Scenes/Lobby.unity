@@ -1361,6 +1361,52 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 655716923}
   m_CullTransparentMesh: 1
+--- !u!1 &792067024
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 792067026}
+  - component: {fileID: 792067025}
+  m_Layer: 0
+  m_Name: WidgetNetcodeIn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &792067025
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 792067024}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0feb06f3a6f94cc485ab340ca49a03b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WidgetNetcodeIntegration
+  enableAutoNetworkStart: 1
+  enableVerboseLogging: 1
+--- !u!4 &792067026
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 792067024}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -14.24853, y: 2.6255, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &835201153
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3644,6 +3690,7 @@ MonoBehaviour:
   leaveButton: {fileID: 571329184}
   copyButton: {fileID: 1354200580}
   sessionCodeManager: {fileID: 1619211161}
+  networkedSceneLoader: {fileID: 0}
   sessionInfoDisplay: {fileID: 0}
   maxPlayers: 4
 --- !u!1 &1877373792
@@ -3935,3 +3982,4 @@ SceneRoots:
   - {fileID: 1669626040}
   - {fileID: 835201153}
   - {fileID: 1619211162}
+  - {fileID: 792067026}
