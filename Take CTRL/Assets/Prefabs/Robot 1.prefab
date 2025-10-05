@@ -542,7 +542,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   robot: {fileID: 4924668643324404191}
-  verticalOffset: -3
+  verticalOffset: 2.5
   horizontalOffset: 0
   followSpeed: 2
 --- !u!1 &4924668643324404191
@@ -560,6 +560,7 @@ GameObject:
   - component: {fileID: 6187327083419646016}
   - component: {fileID: 2925968862443064499}
   - component: {fileID: 6261542098129605507}
+  - component: {fileID: -8229011429583224414}
   m_Layer: 6
   m_Name: Robot 1
   m_TagString: Player
@@ -798,6 +799,31 @@ CapsuleCollider2D:
   m_Offset: {x: -0.14528178, y: -1.5355201}
   m_Size: {x: 0.9398519, y: 9.006135}
   m_Direction: 0
+--- !u!114 &-8229011429583224414
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4924668643324404191}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
+  GlobalObjectIdHash: 1677413196
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
 --- !u!1 &5957173741954840950
 GameObject:
   m_ObjectHideFlags: 0
