@@ -16,10 +16,17 @@ public class RobotManager : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
+        Debug.Log($"🤖 RobotManager.OnNetworkSpawn() - IsServer: {IsServer}, robotSpawned: {robotSpawned}");
+        
         // Only the server should spawn the robot
         if (IsServer && !robotSpawned)
         {
+            Debug.Log("🤖 Server attempting to spawn robot...");
             SpawnSharedRobot();
+        }
+        else
+        {
+            Debug.Log($"🤖 Not spawning robot - IsServer: {IsServer}, robotSpawned: {robotSpawned}");
         }
         
         // Subscribe to connection events
@@ -42,13 +49,17 @@ public class RobotManager : NetworkBehaviour
 
     private void SpawnSharedRobot()
     {
+        Debug.Log("🤖 SpawnSharedRobot() called");
+        
         if (robotPrefab == null)
         {
-            Debug.LogError("Robot prefab is not assigned in RobotManager!");
+            Debug.LogError("🚨 Robot prefab is not assigned in RobotManager!");
             return;
         }
 
         Vector3 spawnPosition = spawnPoint != null ? spawnPoint.position : Vector3.zero;
+        Debug.Log($"🤖 Spawning robot at position: {spawnPosition}");
+        
         spawnedRobot = Instantiate(robotPrefab, spawnPosition, Quaternion.identity);
         
         NetworkObject networkObject = spawnedRobot.GetComponent<NetworkObject>();
@@ -56,11 +67,11 @@ public class RobotManager : NetworkBehaviour
         {
             networkObject.Spawn();
             robotSpawned = true;
-            Debug.Log("Shared robot spawned successfully via RobotManager!");
+            Debug.Log("✅ Shared robot spawned successfully via RobotManager!");
         }
         else
         {
-            Debug.LogError("Robot prefab must have a NetworkObject component!");
+            Debug.LogError("🚨 Robot prefab must have a NetworkObject component!");
             Destroy(spawnedRobot);
             spawnedRobot = null;
         }
@@ -91,12 +102,14 @@ public class RobotManager : NetworkBehaviour
         spawnedRobot = null;
     }
 
-    private void OnDestroy()
+    public override void OnDestroy()
     {
         // Clean up static references when the manager is destroyed
         if (spawnedRobot == this.gameObject)
         {
             ResetRobotState();
         }
+        
+        base.OnDestroy();
     }
 }

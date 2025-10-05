@@ -41,6 +41,11 @@ public class SharedRobotController : NetworkBehaviour
     // Local input tracking
     private Vector2 localMovementInput;
     private bool localSprintInput;
+    
+    // RPC throttling
+    private Vector2 lastSentInput;
+    private bool lastSentSprint;
+    private float lastInputSendTime;
     private bool isGrounded;
     
     private void Awake()
@@ -51,6 +56,8 @@ public class SharedRobotController : NetworkBehaviour
     
     public override void OnNetworkSpawn()
     {
+        Debug.Log($"🎮 SharedRobotController.OnNetworkSpawn() - IsServer: {IsServer}, IsClient: {IsClient}");
+        
         // Enable input for all clients
         EnableInputActions();
         
@@ -59,7 +66,7 @@ public class SharedRobotController : NetworkBehaviour
         combinedSprint.OnValueChanged += OnCombinedSprintChanged;
         isGroundedNet.OnValueChanged += OnGroundedChanged;
         
-        Debug.Log($"SharedRobotController spawned. IsServer: {IsServer}, IsClient: {IsClient}");
+        Debug.Log($"✅ SharedRobotController spawned. IsServer: {IsServer}, IsClient: {IsClient}");
     }
     
     public override void OnNetworkDespawn()
@@ -120,13 +127,27 @@ public class SharedRobotController : NetworkBehaviour
     
     private void Update()
     {
-        // Read local input
+        // ALL clients should read input and send to server (not just owner)
         ReadLocalInput();
         
-        // Send input to server
+        // Send input to server with throttling (only when input changes or every 0.1 seconds)
         if (IsClient)
         {
-            SendInputToServerRpc(localMovementInput, localSprintInput);
+            bool inputChanged = (localMovementInput != lastSentInput) || (localSprintInput != lastSentSprint);
+            bool timeToSend = Time.time - lastInputSendTime > 0.1f;
+            
+            if (inputChanged || timeToSend)
+            {
+                if (localMovementInput.magnitude > 0.1f || inputChanged)
+                {
+                    Debug.Log($"🎮 CLIENT {NetworkManager.Singleton.LocalClientId} SENDING RPC: movement={localMovementInput}, sprint={localSprintInput}");
+                    SendInputToServerRpc(localMovementInput, localSprintInput);
+                    
+                    lastSentInput = localMovementInput;
+                    lastSentSprint = localSprintInput;
+                    lastInputSendTime = Time.time;
+                }
+            }
         }
         
         // Update ground check on server
@@ -147,27 +168,53 @@ public class SharedRobotController : NetworkBehaviour
     
     private void ReadLocalInput()
     {
+        Vector2 previousInput = localMovementInput;
+        
         // Read movement input
         if (moveAction?.action != null)
+        {
             localMovementInput = moveAction.action.ReadValue<Vector2>();
+        }
         else
+        {
             localMovementInput = Vector2.zero;
+            if (Time.frameCount % 120 == 0) // Log once every 2 seconds
+            {
+                Debug.LogWarning("🚨 moveAction is null!");
+            }
+        }
             
         // Read sprint input
         if (sprintAction?.action != null)
             localSprintInput = sprintAction.action.IsPressed();
         else
             localSprintInput = false;
+            
+        // Debug log when input changes (so we can see if client is detecting input)
+        if (localMovementInput != previousInput && localMovementInput.magnitude > 0.1f)
+        {
+            Debug.Log($"🎮 Client {NetworkManager.Singleton.LocalClientId} detected input change: {localMovementInput}");
+        }
     }
     
     [Rpc(SendTo.Server)]
     private void SendInputToServerRpc(Vector2 movement, bool sprint)
     {
-        ulong clientId = NetworkManager.Singleton.LocalClientId;
+        // Simple approach: use a counter for client identification
+        // In a real game, you'd use proper client ID tracking
+        ulong senderId = 0; // We'll fix this properly later
+        
+        // For now, let's just find an available slot or use client count
+        if (!clientInputs.ContainsKey(senderId))
+        {
+            senderId = (ulong)clientInputs.Count;
+        }
+        
+        Debug.Log($"🎮 SERVER RECEIVED INPUT from client {senderId}: movement={movement}, sprint={sprint}");
         
         // Update this client's input
-        clientInputs[clientId] = movement;
-        clientSprints[clientId] = sprint;
+        clientInputs[senderId] = movement;
+        clientSprints[senderId] = sprint;
         
         // Calculate combined input from all clients
         CalculateCombinedInput();
@@ -261,7 +308,7 @@ public class SharedRobotController : NetworkBehaviour
     
     private void OnJumpInput(InputAction.CallbackContext context)
     {
-        if (IsClient && isGroundedNet.Value)
+        if (IsClient)
         {
             TriggerJumpRpc();
         }

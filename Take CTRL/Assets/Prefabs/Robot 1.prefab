@@ -555,12 +555,12 @@ GameObject:
   m_Component:
   - component: {fileID: 2190372658673643784}
   - component: {fileID: 1068505528031319489}
-  - component: {fileID: 7362844522573224425}
   - component: {fileID: 9138567846941147663}
   - component: {fileID: 6187327083419646016}
   - component: {fileID: 2925968862443064499}
   - component: {fileID: 6261542098129605507}
   - component: {fileID: -8229011429583224414}
+  - component: {fileID: 2806980800985591326}
   m_Layer: 6
   m_Name: Robot 1
   m_TagString: Player
@@ -617,34 +617,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!114 &7362844522573224425
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4924668643324404191}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e8f98e092ace249e5bb287a1a9495e26, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
-  rb: {fileID: 1068505528031319489}
-  jumpAction: {fileID: -2099379676528639254, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
-  moveAction: {fileID: -1680190386980627800, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
-  sprintAction: {fileID: -7471211009204490832, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
-  attackAction: {fileID: 1120369429361536294, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
-  dodgeAction: {fileID: 7040659881675835329, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
-  jumpSpeed: 10
-  moveSpeed: 5
-  sprintSpeed: 10
-  isGrounded: 1
-  groundCheckSphere: {fileID: 8132826139098579234}
-  groundCheckRadius: 0.9
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 0
-  animator: {fileID: 6187327083419646016}
 --- !u!212 &9138567846941147663
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -814,7 +786,7 @@ MonoBehaviour:
   GlobalObjectIdHash: 1677413196
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
-  Ownership: 1
+  Ownership: 8
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
@@ -824,6 +796,32 @@ MonoBehaviour:
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 0
+--- !u!114 &2806980800985591326
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4924668643324404191}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad7d0f47e73774e5d8019226eddbfbb9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SharedRobotController
+  ShowTopMostFoldoutHeaderGroup: 1
+  moveSpeed: 5
+  sprintSpeed: 10
+  jumpSpeed: 15
+  moveAction: {fileID: -1680190386980627800, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+  sprintAction: {fileID: -7471211009204490832, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+  jumpAction: {fileID: -2099379676528639254, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+  attackAction: {fileID: 1120369429361536294, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+  dodgeAction: {fileID: 7040659881675835329, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+  groundCheckSphere: {fileID: 8132826139098579234}
+  groundCheckRadius: 0.5
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 8
 --- !u!1 &5957173741954840950
 GameObject:
   m_ObjectHideFlags: 0
