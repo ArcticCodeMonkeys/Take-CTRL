@@ -184,9 +184,10 @@ public class AdvancedSharedRobotController : NetworkBehaviour
     /// RPC to update this player's input on the server
     /// </summary>
     [Rpc(SendTo.Server)]
-    private void UpdatePlayerInputRpc(Vector2 movementInput, bool sprintInput, RpcParams rpcParams = default)
+    private void UpdatePlayerInputRpc(Vector2 movementInput, bool sprintInput)
     {
-        ulong senderId = rpcParams.Receive.SenderClientId;
+        // Use the owner client ID since this RPC is sent from the owner
+        ulong senderId = OwnerClientId;
         
         // Update this player's input
         PlayerInput input = new PlayerInput
@@ -310,14 +311,12 @@ public class AdvancedSharedRobotController : NetworkBehaviour
     /// Jump input - any player can trigger jump if grounded
     /// </summary>
     [Rpc(SendTo.Server)]
-    private void JumpInputRpc(RpcParams rpcParams = default)
+    private void JumpInputRpc()
     {
-        ulong senderId = rpcParams.Receive.SenderClientId;
-        
         if (isGrounded.Value)
         {
             rb.linearVelocity = rb.linearVelocity + (Vector2.up * jumpSpeed);
-            Debug.Log($"Player {senderId} made the character jump!");
+            Debug.Log($"Character jumped!");
         }
     }
     
@@ -325,10 +324,9 @@ public class AdvancedSharedRobotController : NetworkBehaviour
     /// Attack input - any player can trigger attack
     /// </summary>
     [Rpc(SendTo.Server)]
-    private void AttackInputRpc(RpcParams rpcParams = default)
+    private void AttackInputRpc()
     {
-        ulong senderId = rpcParams.Receive.SenderClientId;
-        Debug.Log($"Player {senderId} triggered attack!");
+        Debug.Log($"Attack triggered!");
         
         // Broadcast attack to all clients for visual effects
         ShowAttackEffectRpc();
@@ -338,10 +336,9 @@ public class AdvancedSharedRobotController : NetworkBehaviour
     /// Dodge input - any player can trigger dodge
     /// </summary>
     [Rpc(SendTo.Server)]
-    private void DodgeInputRpc(RpcParams rpcParams = default)
+    private void DodgeInputRpc()
     {
-        ulong senderId = rpcParams.Receive.SenderClientId;
-        Debug.Log($"Player {senderId} triggered dodge!");
+        Debug.Log($"Dodge triggered!");
         
         // Broadcast dodge to all clients for visual effects
         ShowDodgeEffectRpc();

@@ -41,8 +41,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 8488338109744136386}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2edf3588057b84f23a08dbb38e76ece6, type: 3}
+  m_Script: {fileID: 11500000, guid: b9343533f490d4a3fb4006d8d6059a00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SimpleSessionManager
+  titleSceneName: Title Screen
+  hostSceneName: Host Screen
+  joinSceneName: Join Screen
+  lobbySceneName: Lobby
   gameplaySceneName: Warehouse
-  maxPlayers: 4
+  winSceneName: Win Screen
+  loseSceneName: Lose Screen

@@ -1,0 +1,14 @@
+1. Git Pull all Yashi Changes
+2. Fix Movement
+3. Fix Jump (IsGrounded)
+
+4. Fix Drone + Forklift
+5. Add Death
+6. Add Auto Levels
+7. Add Win
+
+8. Finish lobby navigation logic
+Optional:
+9. Add sound effects
+10. Add particle effects
+11. Touch up UI
