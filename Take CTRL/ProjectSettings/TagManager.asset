@@ -3,20 +3,15 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 3
-<<<<<<< HEAD
   tags: []
-=======
-  tags:
-  - Enemy
->>>>>>> main
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Ground
+  - 
   - Water
   - UI
-  - Player
+  - 
   - 
   - 
   - 
@@ -46,17 +41,5 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-<<<<<<< HEAD
-=======
-  - name: Ground
-    uniqueID: 1982853999
-    locked: 0
-  - name: Props
-    uniqueID: 652382011
-    locked: 0
-  - name: Player
-    uniqueID: 3130443267
-    locked: 0
->>>>>>> main
   m_RenderingLayers:
   - Default
