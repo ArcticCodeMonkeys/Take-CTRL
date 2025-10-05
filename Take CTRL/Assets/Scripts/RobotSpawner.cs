@@ -18,6 +18,10 @@ public class RobotSpawner : NetworkBehaviour
     {
         Debug.Log($"RobotSpawner OnNetworkSpawn called. IsServer: {IsServer}, robotSpawned: {robotSpawned}");
         
+        // DISABLED: Using NetworkManagerUI for spawning instead
+        Debug.Log("RobotSpawner disabled - using NetworkManagerUI for robot spawning");
+        return;
+        
         // Only spawn the robot once when the server starts
         if (IsServer && !robotSpawned)
         {

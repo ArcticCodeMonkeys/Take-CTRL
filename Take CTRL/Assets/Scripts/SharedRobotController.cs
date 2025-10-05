@@ -59,6 +59,25 @@ public class SharedRobotController : NetworkBehaviour
         combinedSprint.OnValueChanged += OnCombinedSprintChanged;
         isGroundedNet.OnValueChanged += OnGroundedChanged;
         
+        // Handle camera/audio listener for shared robot
+        Camera robotCamera = GetComponentInChildren<Camera>();
+        AudioListener audioListener = GetComponentInChildren<AudioListener>();
+        
+        if (IsHost)
+        {
+            // Host controls the camera and audio
+            if (robotCamera != null) robotCamera.enabled = true;
+            if (audioListener != null) audioListener.enabled = true;
+            Debug.Log("Host: Camera and AudioListener enabled");
+        }
+        else
+        {
+            // Clients disable camera and audio listener
+            if (robotCamera != null) robotCamera.enabled = false;
+            if (audioListener != null) audioListener.enabled = false;
+            Debug.Log("Client: Camera and AudioListener disabled");
+        }
+        
         Debug.Log($"SharedRobotController spawned. IsServer: {IsServer}, IsClient: {IsClient}");
     }
     

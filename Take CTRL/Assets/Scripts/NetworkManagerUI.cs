@@ -54,6 +54,13 @@ public class NetworkManagerUI : MonoBehaviour
         // Wait a frame to ensure host is fully started
         yield return null;
         
+        // Double-check we haven't already spawned a robot
+        if (robotSpawned)
+        {
+            Debug.Log("Robot already spawned, skipping...");
+            yield break;
+        }
+        
         if (robotPrefab != null && NetworkManager.Singleton.IsHost)
         {
             Vector3 spawnPosition = spawnPoint != null ? spawnPoint.position : Vector3.zero;
@@ -65,6 +72,7 @@ public class NetworkManagerUI : MonoBehaviour
                 networkObject.Spawn();
                 robotSpawned = true;
                 Debug.Log("Shared robot spawned successfully!");
+                Debug.Log($"Robot spawned at position: {robotObj.transform.position}");
             }
             else
             {
@@ -72,9 +80,13 @@ public class NetworkManagerUI : MonoBehaviour
                 Destroy(robotObj);
             }
         }
-        else
+        else if (robotPrefab == null)
         {
             Debug.LogError("Robot prefab is not assigned!");
+        }
+        else
+        {
+            Debug.LogError($"Not spawning robot. IsHost: {NetworkManager.Singleton.IsHost}");
         }
     }
 
