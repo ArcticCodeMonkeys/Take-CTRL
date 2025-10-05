@@ -24,6 +24,8 @@ public class RobotScript : MonoBehaviour
     public float groundCheckRadius = 0.5f; // Increased for testing
     public LayerMask groundLayer = 1 << 3; // Or set this in Inspector for better control
 
+    [SerializeField] private Animator animator; // Reference to the Animator component 
+
     private void OnEnable()
     {
         if (jumpAction?.action != null)
@@ -114,6 +116,24 @@ public class RobotScript : MonoBehaviour
         if (moveAction?.action != null)
         {
             moveInput = moveAction.action.ReadValue<Vector2>();
+            if (moveInput.x != 0)
+            {
+                animator.SetBool("isMoving", true);
+                if (moveInput.x > 0)
+                {
+                    // Moving right
+                    animator.transform.localScale = new Vector3(0.3986438f, 0.3986438f, 0.3986438f); // Face right
+                }
+                else
+                {
+                    // Moving left
+                    animator.transform.localScale = new Vector3(-0.3986438f, 0.3986438f, 0.3986438f); // Face left
+                }
+            }
+            else
+            {
+                animator.SetBool("isMoving", false);
+            }
         }
 
         bool isSprinting = false;
