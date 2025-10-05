@@ -47,6 +47,18 @@ public class SharedRobotController : NetworkBehaviour
     private bool lastSentSprint;
     private float lastInputSendTime;
     private bool isGrounded;
+    private string logFilePath;
+    
+    private void LogToFile(string message)
+    {
+        try
+        {
+            string timestamp = System.DateTime.Now.ToString("HH:mm:ss.fff");
+            string logEntry = $"[{timestamp}] Client {NetworkManager.Singleton.LocalClientId}: {message}\n";
+            System.IO.File.AppendAllText(logFilePath, logEntry);
+        }
+        catch { /* Ignore file errors */ }
+    }
     
     private void Awake()
     {
@@ -57,6 +69,11 @@ public class SharedRobotController : NetworkBehaviour
     public override void OnNetworkSpawn()
     {
         Debug.Log($"🎮 SharedRobotController.OnNetworkSpawn() - IsServer: {IsServer}, IsClient: {IsClient}");
+        
+        // Initialize log file
+        string documentsPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Desktop);
+        logFilePath = System.IO.Path.Combine(documentsPath, $"TakeCTRL_Client{NetworkManager.Singleton.LocalClientId}_Logs.txt");
+        LogToFile($"🎮 SharedRobotController spawned - IsServer: {IsServer}, IsClient: {IsClient}");
         
         // Enable input for all clients
         EnableInputActions();
@@ -140,7 +157,9 @@ public class SharedRobotController : NetworkBehaviour
             {
                 if (localMovementInput.magnitude > 0.1f || inputChanged)
                 {
-                    Debug.Log($"🎮 CLIENT {NetworkManager.Singleton.LocalClientId} SENDING RPC: movement={localMovementInput}, sprint={localSprintInput}");
+                    string message = $"🎮 SENDING RPC: movement={localMovementInput}, sprint={localSprintInput}";
+                    Debug.Log($"🎮 CLIENT {NetworkManager.Singleton.LocalClientId} {message}");
+                    LogToFile(message);
                     SendInputToServerRpc(localMovementInput, localSprintInput);
                     
                     lastSentInput = localMovementInput;
@@ -160,10 +179,8 @@ public class SharedRobotController : NetworkBehaviour
     private void FixedUpdate()
     {
         // Apply movement based on combined input
-        if (IsServer)
-        {
-            ApplyMovement();
-        }
+        // Both server and clients need to apply movement for smooth synchronization
+        ApplyMovement();
     }
     
     private void ReadLocalInput()
@@ -193,7 +210,9 @@ public class SharedRobotController : NetworkBehaviour
         // Debug log when input changes (so we can see if client is detecting input)
         if (localMovementInput != previousInput && localMovementInput.magnitude > 0.1f)
         {
-            Debug.Log($"🎮 Client {NetworkManager.Singleton.LocalClientId} detected input change: {localMovementInput}");
+            string message = $"🎮 detected input change: {localMovementInput}";
+            Debug.Log($"🎮 Client {NetworkManager.Singleton.LocalClientId} {message}");
+            LogToFile(message);
         }
     }
     
@@ -255,6 +274,14 @@ public class SharedRobotController : NetworkBehaviour
         
         Vector2 movement = combinedMovement.Value;
         bool sprint = combinedSprint.Value;
+        
+        // Debug log movement application
+        if (movement.magnitude > 0.1f && Time.frameCount % 30 == 0) // Log every 0.5 seconds when moving
+        {
+            string message = $"🏃 APPLYING movement: {movement}, sprint: {sprint}, isServer: {IsServer}";
+            Debug.Log($"🏃 {(IsServer ? "SERVER" : "CLIENT")} {NetworkManager.Singleton.LocalClientId} {message}");
+            LogToFile(message);
+        }
         
         // Handle horizontal movement
         if (movement.magnitude > 0.1f)
@@ -357,7 +384,13 @@ public class SharedRobotController : NetworkBehaviour
     // Network variable change callbacks
     private void OnCombinedMovementChanged(Vector2 oldValue, Vector2 newValue)
     {
-        // Movement is handled in FixedUpdate on server
+        // When movement changes, apply it immediately for responsive client updates
+        if (!IsServer)
+        {
+            string message = $"🔄 CLIENT RECEIVED movement update: {oldValue} → {newValue}";
+            Debug.Log($"🔄 Client {NetworkManager.Singleton.LocalClientId} {message}");
+            LogToFile(message);
+        }
     }
     
     private void OnCombinedSprintChanged(bool oldValue, bool newValue)
