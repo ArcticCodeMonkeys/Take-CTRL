@@ -48,8 +48,8 @@ MonoBehaviour:
   NetworkManagerExpanded: 0
   NetworkConfig:
     ProtocolVersion: 0
-    NetworkTransport: {fileID: 0}
-    PlayerPrefab: {fileID: 2108885347662207200, guid: 3d907fdf7ebb59541a7e62707fb30790, type: 3}
+    NetworkTransport: {fileID: 3447554624382133414}
+    PlayerPrefab: {fileID: 0}
     Prefabs:
       NetworkPrefabsLists:
       - {fileID: 11400000, guid: 91d7972160488ba47898eaf437c57a00, type: 2}
@@ -100,7 +100,7 @@ MonoBehaviour:
   ConnectionData:
     Address: 127.0.0.1
     Port: 8888
-    ServerListenAddress: 127.0.0.1
+    ServerListenAddress: 0.0.0.0
   DebugSimulator:
     PacketDelayMS: 0
     PacketJitterMS: 0

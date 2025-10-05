@@ -4,13 +4,7 @@ using System.Collections;
 
 public class SceneLoader : MonoBehaviour
 {
-    public static SceneLoader Instance { get; private set; }
-
-    void Awake()
-    {
-        if (Instance == null) { Instance = this; DontDestroyOnLoad(gameObject); }
-        else { Destroy(gameObject); }
-    }
+    // Remove singleton pattern - just use simple methods
 
     // Immediate load (blocking)
     public void LoadScene(string sceneName)
