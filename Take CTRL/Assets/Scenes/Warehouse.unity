@@ -585,9 +585,9 @@ MonoBehaviour:
   m_MaxConnectAttempts: 60
   m_DisconnectTimeoutMS: 30000
   ConnectionData:
-    Address: 127.0.0.1
+    Address: 0.0.0.0
     Port: 7778
-    ServerListenAddress: 127.0.0.1
+    ServerListenAddress: 0.0.0.0
   DebugSimulator:
     PacketDelayMS: 0
     PacketJitterMS: 0
@@ -846,7 +846,7 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_NormalColor: {r: 0.8962264, g: 0.57717, b: 0.063412234, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
@@ -1320,8 +1320,8 @@ MonoBehaviour:
   clientButton: {fileID: 1483424365}
   backButton: {fileID: 1121426002}
   ipInputField: {fileID: 2085217180}
-  robotPrefab: {fileID: 0}
-  spawnPoint: {fileID: 0}
+  robotPrefab: {fileID: 4924668643324404191, guid: 0f98e3c5c3f204f5191737840758de23, type: 3}
+  spawnPoint: {fileID: 2046724954}
 --- !u!1 &2046724953
 GameObject:
   m_ObjectHideFlags: 0
