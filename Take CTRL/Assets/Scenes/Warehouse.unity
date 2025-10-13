@@ -553,6 +553,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Background+floor
       objectReference: {fileID: 0}
+    - target: {fileID: 5732301665056018311, guid: 1689ef97cc95c441b83a68d5db849541, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6167495614396069719, guid: 1689ef97cc95c441b83a68d5db849541, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6356085857351586207, guid: 1689ef97cc95c441b83a68d5db849541, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6902984045703061140, guid: 1689ef97cc95c441b83a68d5db849541, type: 3}
       propertyPath: m_LocalPosition.x
       value: -16.825403

@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+// NOTE: THIS IS NO LONGER USED - REPLACED BY SharedRobotController FOR NETWORKED ROBOT
 public class RobotScript : MonoBehaviour
 {
     public Rigidbody2D rb;
@@ -82,9 +83,15 @@ public class RobotScript : MonoBehaviour
 
     private void OnJump(InputAction.CallbackContext ctx)
     {
-        if(isGrounded) 
+        Debug.Log($"OnJump called! IsGrounded: {isGrounded}");
+        if (isGrounded)
         {
             rb.linearVelocity = rb.linearVelocity + (Vector2.up * jumpSpeed);
+            Debug.Log("Jumped!");
+        }
+        else
+        {
+            Debug.Log("Jump ignored - not grounded");
         }
     }
 
@@ -155,7 +162,7 @@ public class RobotScript : MonoBehaviour
     }
     private void HandleJump()
     {
-        
+
         if (checkIsGrounded())
         {
             isGrounded = true;
@@ -174,7 +181,7 @@ public class RobotScript : MonoBehaviour
             return false;
         }
 
-       
+
         Collider2D[] colliders = Physics2D.OverlapCircleAll(groundCheckSphere.position, groundCheckRadius, groundLayer);
         for (int i = 0; i < colliders.Length; i++)
         {
@@ -196,5 +203,5 @@ public class RobotScript : MonoBehaviour
         }
         return false;
     }
-    
+
 }
