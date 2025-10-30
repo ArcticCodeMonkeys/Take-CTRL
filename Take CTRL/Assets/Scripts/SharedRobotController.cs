@@ -65,14 +65,55 @@ public class SharedRobotController : NetworkBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        
+        // Subscribe to scene loaded events to manage camera state
+        UnityEngine.SceneManagement.SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+    
+    private void OnDestroy()
+    {
+        // Unsubscribe from scene loaded events
+        UnityEngine.SceneManagement.SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+    
+    /// <summary>
+    /// Called when a scene is loaded - manages camera state based on scene type
+    /// </summary>
+    private void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode mode)
+    {
+        bool isInGameScene = (scene.name == "Warehouse" || scene.name == "Level1");
+        
+        // Disable robot camera if not in a game scene (e.g., in Lobby or Lose)
+        Camera robotCamera = GetComponentInChildren<Camera>();
+        if (robotCamera != null)
+        {
+            robotCamera.enabled = isInGameScene;
+            Debug.Log($"📷 Scene changed to {scene.name} - Robot camera {(isInGameScene ? "enabled" : "disabled")}");
+        }
     }
     
     public override void OnNetworkSpawn()
     {
         Debug.Log($"🎮 SharedRobotController.OnNetworkSpawn() - IsServer: {IsServer}, IsClient: {IsClient}");
         
+        // Check current scene to determine if we should enable/disable camera
+        string currentScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+        bool isInGameScene = (currentScene == "Warehouse" || currentScene == "Level1");
+        
+        // Manage camera state based on scene
+        Camera robotCamera = GetComponentInChildren<Camera>();
+        if (robotCamera != null)
+        {
+            robotCamera.enabled = isInGameScene;
+            Debug.Log($"📷 Robot camera {(isInGameScene ? "enabled" : "disabled")} for scene: {currentScene}");
+        }
+        
         // Ensure player visuals are shown (in case they were hidden from a previous Lose scene)
-        ShowPlayerVisuals();
+        // But only if we're in a game scene
+        if (isInGameScene)
+        {
+            ShowPlayerVisuals();
+        }
         
         // Initialize log file
         string documentsPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Desktop);
