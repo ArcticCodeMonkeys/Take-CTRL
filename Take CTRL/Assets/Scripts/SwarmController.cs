@@ -13,8 +13,11 @@ public class SwarmController : MonoBehaviour
     [Header("Drone Management")]
     [SerializeField] private List<SwarmDroneScript> drones = new List<SwarmDroneScript>();
     [SerializeField] private bool autoFindDrones = true;
+
+    [SerializeField] private Collider2D swarmCollider;
     
     private Vector3 startPosition;
+
     
     void Start()
     {
@@ -126,6 +129,30 @@ public class SwarmController : MonoBehaviour
     public int GetDroneCount()
     {
         return drones.Count;
+    }
+    
+    /// <summary>
+    /// Handle collision with the player robot (for trigger colliders)
+    /// </summary>
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        // Check if we hit the player robot
+        if (other.CompareTag("Player"))
+        {
+            Debug.Log($"💀 Swarm {gameObject.name} hit player!");
+            
+            // Try to get the SharedRobotController component
+            SharedRobotController robotController = other.GetComponent<SharedRobotController>();
+            if (robotController != null)
+            {
+                // Kill the robot
+                robotController.Die();
+            }
+            else
+            {
+                Debug.LogWarning("Player hit but no SharedRobotController found!");
+            }
+        }
     }
     
     void OnDrawGizmos()

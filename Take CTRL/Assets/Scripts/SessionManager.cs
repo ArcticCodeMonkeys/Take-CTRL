@@ -24,6 +24,18 @@ public class SessionManager : NetworkBehaviour
     {
         // Wait for NetworkManager to be available (since Multiplayer Widgets create it)
         StartCoroutine(WaitForNetworkManagerAndSetup());
+
+         string currentScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+        if (currentScene == lobbySceneName && IsServer)
+        {
+            gameStarted.Value = false;
+            Debug.Log("Returned to lobby - resetting game state");
+        }
+        Debug.Log($"NetworkObjects in scene: {FindObjectsOfType<NetworkObject>().Length}");
+foreach(var no in FindObjectsOfType<NetworkObject>())
+{
+    Debug.Log($"Found NetworkObject: {no.name}");
+}
     }
     
     private System.Collections.IEnumerator WaitForNetworkManagerAndSetup()

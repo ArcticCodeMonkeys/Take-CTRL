@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Unity.Netcode;
+using System.Collections;
 using System.Collections.Generic;
 
 /// <summary>
@@ -401,6 +402,55 @@ public class SharedRobotController : NetworkBehaviour
     private void OnGroundedChanged(bool oldValue, bool newValue)
     {
         isGrounded = newValue;
+    }
+    
+    /// <summary>
+    /// Kill the robot (called when hit by dangerous objects like swarm drones)
+    /// </summary>
+    public void Die()
+    {
+        if (IsServer)
+        {
+            TriggerDeathRpc();
+        }
+    }
+    
+    /// <summary>
+    /// RPC to handle death on all clients
+    /// </summary>
+    [Rpc(SendTo.ClientsAndHost)]
+    private void TriggerDeathRpc()
+    {
+        Debug.Log("🔥 Robot has died! Switching to Lose scene...");
+        
+        // Disable movement by setting zero velocity
+        if (rb != null)
+        {
+            rb.linearVelocity = Vector2.zero;
+        }
+        
+        // Disable input actions
+        DisableInputActions();
+        
+        // Switch to Lose scene after a short delay
+        StartCoroutine(SwitchToLoseSceneAfterDelay(1f));
+    }
+    
+    /// <summary>
+    /// Coroutine to switch to the Lose scene after death
+    /// </summary>
+    private System.Collections.IEnumerator SwitchToLoseSceneAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        
+        // Only the server should handle scene switching in networked games
+        if (IsServer && NetworkManager.Singleton != null)
+        {
+            Debug.Log("🔄 Switching all clients to Lose scene...");
+            
+            // Use NetworkManager to switch scene for all clients
+            NetworkManager.Singleton.SceneManager.LoadScene("Lose", UnityEngine.SceneManagement.LoadSceneMode.Single);
+        }
     }
     
     private void OnDrawGizmosSelected()
