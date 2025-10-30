@@ -71,6 +71,9 @@ public class SharedRobotController : NetworkBehaviour
     {
         Debug.Log($"🎮 SharedRobotController.OnNetworkSpawn() - IsServer: {IsServer}, IsClient: {IsClient}");
         
+        // Ensure player visuals are shown (in case they were hidden from a previous Lose scene)
+        ShowPlayerVisuals();
+        
         // Initialize log file
         string documentsPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Desktop);
         logFilePath = System.IO.Path.Combine(documentsPath, $"TakeCTRL_Client{NetworkManager.Singleton.LocalClientId}_Logs.txt");
@@ -443,6 +446,9 @@ public class SharedRobotController : NetworkBehaviour
     {
         yield return new WaitForSeconds(delay);
         
+        // Hide the player visuals before switching scenes
+        HidePlayerVisuals();
+        
         // Only the server should handle scene switching in networked games
         if (IsServer && NetworkManager.Singleton != null)
         {
@@ -451,6 +457,50 @@ public class SharedRobotController : NetworkBehaviour
             // Use NetworkManager to switch scene for all clients
             NetworkManager.Singleton.SceneManager.LoadScene("Lose", UnityEngine.SceneManagement.LoadSceneMode.Single);
         }
+    }
+    
+    /// <summary>
+    /// Hides the player's visual components (needed for camera but invisible in Lose scene)
+    /// </summary>
+    private void HidePlayerVisuals()
+    {
+        // Disable all SpriteRenderers on this object and its children
+        SpriteRenderer[] spriteRenderers = GetComponentsInChildren<SpriteRenderer>();
+        foreach (SpriteRenderer sr in spriteRenderers)
+        {
+            sr.enabled = false;
+        }
+        
+        // Also disable MeshRenderers if any
+        MeshRenderer[] meshRenderers = GetComponentsInChildren<MeshRenderer>();
+        foreach (MeshRenderer mr in meshRenderers)
+        {
+            mr.enabled = false;
+        }
+        
+        Debug.Log("👻 Player visuals hidden for Lose scene");
+    }
+    
+    /// <summary>
+    /// Shows the player's visual components (called when starting a new game)
+    /// </summary>
+    private void ShowPlayerVisuals()
+    {
+        // Re-enable all SpriteRenderers on this object and its children
+        SpriteRenderer[] spriteRenderers = GetComponentsInChildren<SpriteRenderer>(true);
+        foreach (SpriteRenderer sr in spriteRenderers)
+        {
+            sr.enabled = true;
+        }
+        
+        // Also re-enable MeshRenderers if any
+        MeshRenderer[] meshRenderers = GetComponentsInChildren<MeshRenderer>(true);
+        foreach (MeshRenderer mr in meshRenderers)
+        {
+            mr.enabled = true;
+        }
+        
+        Debug.Log("✨ Player visuals shown for new game");
     }
     
     private void OnDrawGizmosSelected()

@@ -146,6 +146,9 @@ foreach(var no in FindObjectsOfType<NetworkObject>())
     {
         if (!IsServer || gameStarted.Value) return;
         
+        // Reset robot spawning state before starting a new game
+        RobotManager.ResetRobotState();
+        
         gameStarted.Value = true;
         Debug.Log("Starting game - transitioning to game scene");
         
@@ -232,6 +235,33 @@ foreach(var no in FindObjectsOfType<NetworkObject>())
     {
         // Wait for network shutdown to complete
         yield return new WaitForSeconds(1f);
+        
+        // Reset the robot spawning state for the next game
+        RobotManager.ResetRobotState();
+        Debug.Log("Reset robot spawning state");
+        
+        // Clean up any DontDestroyOnLoad objects before returning to title
+        if (NetworkManager.Singleton != null)
+        {
+            Debug.Log("Destroying NetworkManager and cleaning up persistent objects");
+            
+            // Find all NetworkObjects and despawn/destroy them
+            NetworkObject[] networkObjects = FindObjectsOfType<NetworkObject>();
+            foreach (NetworkObject netObj in networkObjects)
+            {
+                if (netObj != null)
+                {
+                    Debug.Log($"Cleaning up NetworkObject: {netObj.name}");
+                    Destroy(netObj.gameObject);
+                }
+            }
+            
+            // Destroy the NetworkManager itself
+            Destroy(NetworkManager.Singleton.gameObject);
+        }
+        
+        // Wait a bit more for cleanup to complete
+        yield return new WaitForSeconds(0.5f);
         
         // Load title screen (non-networked)
         UnityEngine.SceneManagement.SceneManager.LoadScene("Title Screen");

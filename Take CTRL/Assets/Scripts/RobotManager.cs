@@ -18,6 +18,19 @@ public class RobotManager : NetworkBehaviour
     {
         Debug.Log($"🤖 RobotManager.OnNetworkSpawn() - IsServer: {IsServer}, robotSpawned: {robotSpawned}");
         
+        // Check if we're in the game scene - reset if we are (handles returning from Lose scene)
+        string currentScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+        if (currentScene == "Warehouse" || currentScene == "Level1")
+        {
+            Debug.Log($"🤖 In game scene {currentScene}, ensuring robot state is fresh");
+            // If there's no actual spawned robot in the scene, reset the flag
+            if (spawnedRobot == null)
+            {
+                Debug.Log("🤖 No spawned robot found, resetting state");
+                robotSpawned = false;
+            }
+        }
+        
         // Only the server should spawn the robot
         if (IsServer && !robotSpawned)
         {
@@ -45,6 +58,9 @@ public class RobotManager : NetworkBehaviour
             NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnected;
             NetworkManager.Singleton.OnClientDisconnectCallback -= OnClientDisconnected;
         }
+        
+        Debug.Log("🤖 RobotManager despawning, resetting robot state");
+        ResetRobotState();
     }
 
     private void SpawnSharedRobot()
@@ -104,11 +120,17 @@ public class RobotManager : NetworkBehaviour
 
     public override void OnDestroy()
     {
-        // Clean up static references when the manager is destroyed
-        if (spawnedRobot == this.gameObject)
+        // Clean up event subscriptions
+        if (IsServer && NetworkManager.Singleton != null)
         {
-            ResetRobotState();
+            NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnected;
+            NetworkManager.Singleton.OnClientDisconnectCallback -= OnClientDisconnected;
         }
+        
+        // Always reset the static state when a RobotManager is destroyed
+        // This ensures clean state for the next game session
+        Debug.Log("🤖 RobotManager being destroyed, resetting static state");
+        ResetRobotState();
         
         base.OnDestroy();
     }
