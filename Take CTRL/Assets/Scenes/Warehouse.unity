@@ -299,12 +299,17 @@ MonoBehaviour:
   spawnPoint: {fileID: 2046724954}
   player: {fileID: 0}
   droneSwarm: {fileID: 354796445295204252}
-  backgroundFloorPrefab: {fileID: 5732301665056018311, guid: 1689ef97cc95c441b83a68d5db849541, type: 3}
+  chunkPrefabs:
+  - {fileID: 5732301665056018311, guid: c3f72a0d8c9c2714399bdaea2786771d, type: 3}
+  - {fileID: 5732301665056018311, guid: f307e4e0bd7a38748b76d424bb0cbd80, type: 3}
+  - {fileID: 5732301665056018311, guid: 56c1fbe4394b97645a21e3f53422952a, type: 3}
+  - {fileID: 5732301665056018311, guid: e895caa38d4517e4ca406277494fcfd7, type: 3}
+  - {fileID: 5732301665056018311, guid: c3182d0cabe3adf42b71010d112b924b, type: 3}
+  breakPrefab: {fileID: 5732301665056018311, guid: 1689ef97cc95c441b83a68d5db849541, type: 3}
   chunkWidth: 20.8
   initialChunks: 5
   spawnDistance: 50
   deleteDistance: 100
-  alwaysDrawGizmos: 1
 --- !u!4 &1018161359
 Transform:
   m_ObjectHideFlags: 0

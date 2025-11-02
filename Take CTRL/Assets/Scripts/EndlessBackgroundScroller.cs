@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 /// <summary>
 /// Manages endless scrolling background and floor for side-scrolling levels.
-/// Spawns new chunks ahead of the player and removes chunks that fall behind the DroneSwarm.
+/// Spawns random chunks (with enemies and obstacles) ahead of the player and removes chunks that fall behind the DroneSwarm.
 /// </summary>
 public class EndlessBackgroundScroller : MonoBehaviour
 {
@@ -11,7 +11,8 @@ public class EndlessBackgroundScroller : MonoBehaviour
     [SerializeField] private Transform spawnPoint;
     [SerializeField] private Transform player; // Robot/player for spawning chunks ahead
     [SerializeField] private Transform droneSwarm; // DroneSwarm for despawning chunks behind
-    [SerializeField] private GameObject backgroundFloorPrefab;
+    [SerializeField] private GameObject[] chunkPrefabs; // Array of chunk prefabs (Background+floor+enemies+obstacles)
+    [SerializeField] private GameObject breakPrefab; // Empty chunk that spawns before each content chunk
     
     [Header("Spawn Settings")]
     [SerializeField] private float chunkWidth = 19.2f; // Width of each Background+floor chunk
@@ -24,6 +25,7 @@ public class EndlessBackgroundScroller : MonoBehaviour
     // Track spawned chunks
     private List<GameObject> spawnedChunks = new List<GameObject>();
     private float nextSpawnX;
+    private bool spawnBreakNext = true; // Track whether to spawn a break chunk or content chunk next
     
     void Start()
     {
@@ -43,9 +45,32 @@ public class EndlessBackgroundScroller : MonoBehaviour
             }
         }
         
-        if (backgroundFloorPrefab == null)
+        if (chunkPrefabs == null || chunkPrefabs.Length == 0)
         {
-            Debug.LogError("EndlessBackgroundScroller: Background+floor prefab not assigned!");
+            Debug.LogError("EndlessBackgroundScroller: No chunk prefabs assigned!");
+            enabled = false;
+            return;
+        }
+        
+        if (breakPrefab == null)
+        {
+            Debug.LogWarning("EndlessBackgroundScroller: Break prefab not assigned! Will only spawn content chunks.");
+        }
+        
+        // Check if any chunk prefabs are assigned
+        bool hasValidPrefab = false;
+        for (int i = 0; i < chunkPrefabs.Length; i++)
+        {
+            if (chunkPrefabs[i] != null)
+            {
+                hasValidPrefab = true;
+                break;
+            }
+        }
+        
+        if (!hasValidPrefab)
+        {
+            Debug.LogError("EndlessBackgroundScroller: No valid chunk prefabs found in array!");
             enabled = false;
             return;
         }
@@ -136,18 +161,49 @@ public class EndlessBackgroundScroller : MonoBehaviour
     }
     
     /// <summary>
-    /// Spawn a new Background+floor chunk at the next spawn position
+    /// Spawn a new chunk at the next spawn position, alternating between break chunks and content chunks
     /// </summary>
     private void SpawnChunk()
     {
+        GameObject selectedChunk = null;
+        
+        // Alternate between break chunk and content chunk
+        if (spawnBreakNext && breakPrefab != null)
+        {
+            // Spawn a break (empty) chunk
+            selectedChunk = breakPrefab;
+            spawnBreakNext = false; // Next spawn will be content
+        }
+        else
+        {
+            // Spawn a content chunk (with enemies/obstacles)
+            GameObject[] availableChunks = System.Array.FindAll(chunkPrefabs, chunk => chunk != null);
+            
+            if (availableChunks.Length == 0)
+            {
+                Debug.LogError("No valid chunk prefabs available!");
+                return;
+            }
+            
+            int randomIndex = Random.Range(0, availableChunks.Length);
+            selectedChunk = availableChunks[randomIndex];
+            spawnBreakNext = true; // Next spawn will be break
+        }
+        
+        if (selectedChunk == null)
+        {
+            Debug.LogError("Selected chunk is null!");
+            return;
+        }
+        
         Vector3 spawnPosition = new Vector3(
             nextSpawnX,
             spawnPoint.position.y + 5.05f,
             spawnPoint.position.z
         );
         
-        GameObject newChunk = Instantiate(backgroundFloorPrefab, spawnPosition, Quaternion.identity);
-        newChunk.name = $"Background+floor_Chunk_{spawnedChunks.Count}";
+        GameObject newChunk = Instantiate(selectedChunk, spawnPosition, Quaternion.identity);
+        newChunk.name = $"{selectedChunk.name}_Chunk_{spawnedChunks.Count}";
         newChunk.transform.parent = transform; // Parent to this manager for organization
         
         spawnedChunks.Add(newChunk);
@@ -215,6 +271,7 @@ public class EndlessBackgroundScroller : MonoBehaviour
         }
         spawnedChunks.Clear();
         nextSpawnX = spawnPoint.position.x;
+        spawnBreakNext = true; // Reset to start with break chunk
     }
     
     // Draw gizmos in editor to visualize spawn and delete distances
