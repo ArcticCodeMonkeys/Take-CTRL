@@ -13,11 +13,15 @@ public class EndlessBackgroundScroller : MonoBehaviour
     [SerializeField] private Transform droneSwarm; // DroneSwarm for despawning chunks behind
     [SerializeField] private GameObject[] chunkPrefabs; // Array of chunk prefabs (Background+floor+enemies+obstacles)
     [SerializeField] private GameObject breakPrefab; // Empty chunk that spawns before each content chunk
+    [SerializeField] private GameObject endChunkPrefab; // Final chunk that triggers win screen
     
     [Header("Spawn Settings")]
     [SerializeField] private float chunkWidth = 19.2f; // Width of each Background+floor chunk
     [SerializeField] private int initialChunks = 5; // Number of chunks to spawn at start
     [SerializeField] private float spawnDistance = 50f; // Distance ahead of player to spawn new chunks
+    
+    [Header("Level End Settings")]
+    [SerializeField] private int chunksBeforeEnd = 15; // Number of content chunks to spawn before the end chunk
     
     [Header("Cleanup Settings")]
     [SerializeField] private float deleteDistance = 100f; // Delete chunks when they're this far behind DroneSwarm
@@ -26,6 +30,8 @@ public class EndlessBackgroundScroller : MonoBehaviour
     private List<GameObject> spawnedChunks = new List<GameObject>();
     private float nextSpawnX;
     private bool spawnBreakNext = true; // Track whether to spawn a break chunk or content chunk next
+    private int contentChunksSpawned = 0; // Count of content chunks spawned (excludes break chunks)
+    private bool endChunkSpawned = false; // Track if the end chunk has been spawned
     
     void Start()
     {
@@ -55,6 +61,11 @@ public class EndlessBackgroundScroller : MonoBehaviour
         if (breakPrefab == null)
         {
             Debug.LogWarning("EndlessBackgroundScroller: Break prefab not assigned! Will only spawn content chunks.");
+        }
+        
+        if (endChunkPrefab == null)
+        {
+            Debug.LogWarning("EndlessBackgroundScroller: End chunk prefab not assigned! Level will be endless.");
         }
         
         // Check if any chunk prefabs are assigned
@@ -120,7 +131,8 @@ public class EndlessBackgroundScroller : MonoBehaviour
         float droneX = droneSwarm.position.x;
         
         // Spawn new chunks if player is approaching the last spawned chunk
-        while (nextSpawnX < playerX + spawnDistance)
+        // Stop spawning if end chunk has been spawned
+        while (nextSpawnX < playerX + spawnDistance && !endChunkSpawned)
         {
             SpawnChunk();
         }
@@ -167,8 +179,15 @@ public class EndlessBackgroundScroller : MonoBehaviour
     {
         GameObject selectedChunk = null;
         
+        // Check if we should spawn the end chunk
+        if (contentChunksSpawned >= chunksBeforeEnd && endChunkPrefab != null && !endChunkSpawned)
+        {
+            selectedChunk = endChunkPrefab;
+            endChunkSpawned = true;
+            Debug.Log($"Spawning end chunk after {contentChunksSpawned} content chunks!");
+        }
         // Alternate between break chunk and content chunk
-        if (spawnBreakNext && breakPrefab != null)
+        else if (spawnBreakNext && breakPrefab != null)
         {
             // Spawn a break (empty) chunk
             selectedChunk = breakPrefab;
@@ -188,6 +207,7 @@ public class EndlessBackgroundScroller : MonoBehaviour
             int randomIndex = Random.Range(0, availableChunks.Length);
             selectedChunk = availableChunks[randomIndex];
             spawnBreakNext = true; // Next spawn will be break
+            contentChunksSpawned++; // Increment content chunk counter
         }
         
         if (selectedChunk == null)
@@ -272,6 +292,8 @@ public class EndlessBackgroundScroller : MonoBehaviour
         spawnedChunks.Clear();
         nextSpawnX = spawnPoint.position.x;
         spawnBreakNext = true; // Reset to start with break chunk
+        contentChunksSpawned = 0; // Reset content chunk counter
+        endChunkSpawned = false; // Reset end chunk flag
     }
     
     // Draw gizmos in editor to visualize spawn and delete distances
